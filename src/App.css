@@ -1,0 +1,31 @@
+.App {
+  padding: 30px;
+  display: flex;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+
+input {
+  outline: none;
+}
+
+.error {
+  border: solid 1px red;
+}
+
+.error-message {
+  color: red
+}
+
+.active-filter {
+  background-color: lightblue;
+  border: blue solid 1px;
+  color: blue;
+}
+.isDone {
+  opacity: 0.3;
+  text-decoration: line-through;
+  text-decoration-color: blue;
+}
