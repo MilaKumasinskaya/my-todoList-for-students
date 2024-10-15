@@ -29,3 +29,13 @@ input {
   text-decoration: line-through;
   text-decoration-color: blue;
 }
+.todolist-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.todolist-title-container button {
+height: 20px;
+
+}
