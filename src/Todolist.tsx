@@ -1,6 +1,8 @@
 import {FilterValuesType, TaskType} from "./App";
 import {Button} from "./Button";
-import {ChangeEvent, useState, KeyboardEvent, useRef} from "react";
+import {ChangeEvent} from "react";
+import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 type TodolistPropsType = {
     todolistId: string
@@ -8,8 +10,10 @@ type TodolistPropsType = {
     tasks: TaskType[]
     data?: string
     filter: FilterValuesType
+    updateTodoTitle: (todolistId: string, title: string) => void
     removeTodolist: (todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
+    updateTaskTitle: (taskId: string, title: string, todolistId: string) => void
     deleteTask: (taskId: string, todolistId: string) => void
     filterTasks: (filer: FilterValuesType, todolistId: string) => void
     changeTaskStatus: (taskId: string, taskStatus: boolean, todolistId: string) => void
@@ -21,40 +25,14 @@ export const Todolist = ({
                              tasks,
                              data,
                              filter,
+                             updateTodoTitle,
                              removeTodolist,
                              addTask,
+                             updateTaskTitle,
                              deleteTask,
                              filterTasks,
                              changeTaskStatus
                          }: TodolistPropsType) => {
-        // //добавляем заголовок с помощью useRef
-        // const inputTitleRef = useRef<HTMLInputElement>(null)
-        //добавляе заголовок с помощью useState
-        const [taskTitle, setTaskTitle] = useState('')
-        //добавляе обработку ошибки с помощью useState
-        const [error, setError] = useState<string | null>(null)
-
-        const onChangeTaskTitle = (event: ChangeEvent<HTMLInputElement>) => {
-            setTaskTitle(event.currentTarget.value)
-            setError(null)
-        }
-
-        const addTaskTitleHandler = () => {
-            if (taskTitle.trim() !== '') {
-                addTask(taskTitle.trim(), todolistId)
-                setTaskTitle('')
-            } else {
-                setError('enter a task title')
-            }
-            // console.log(error)
-        }
-
-        const addTaskOnEnterTitleHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === 'Enter') {
-                addTaskTitleHandler()
-            }
-            // console.log(error)
-        }
 
         const allFilerTasksHandler = () => {
             filterTasks('all', todolistId)
@@ -68,38 +46,35 @@ export const Todolist = ({
             filterTasks('completed', todolistId)
         }
 
+        const onChangeTodoTitleHandler = (title: string) => {
+            updateTodoTitle(todolistId, title)
+        }
+
         const removeTodolistHandler = () => {
             removeTodolist(todolistId)
+        }
+
+        const addTaskHandler = (title: string) => {
+            addTask(title, todolistId)
         }
 
         return (
             <div>
                 <div className={'todolist-title-container'}>
-                    <h3>{title}</h3>
+                    <EditableSpan value={title} onChange={onChangeTodoTitleHandler}/>
                     <Button title={'x'} onClick={removeTodolistHandler}/>
                 </div>
-                <div>
-                    <input className={error ? 'error' : ''} value={taskTitle} onChange={onChangeTaskTitle}
-                           onKeyDown={addTaskOnEnterTitleHandler}/>
-                    {error && <div className={'error-message'}>{error}</div>}
-                    <Button title={'+'} onClick={addTaskTitleHandler} disabled={!!error}/>
-
-                    {/*//добавляем заголовок с помощью useRef*/}
-                    {/*<input ref={inputTitleRef}/>*/}
-                    {/*<Button title='+'*/}
-                    {/*        onClick={() => {*/}
-                    {/*if(inputTitleRef.current){*/}
-                    {/*    addTask(inputTitleRef.current.value)*/}
-                    {/*    console.log(inputTitleRef.current.value)*/}
-                    {/*}*/}
-                    {/*}} />*/}
-
-                </div>
+                <AddItemForm addItem={addTaskHandler}/>
 
                 {tasks.length === 0 ?
                     <p>tasks' list is empty</p> :
                     <ul>
                         {tasks.map((t) => {
+
+                            const onChangeTaskTitleHandler = (title: string) => {
+                                updateTaskTitle(t.id, title, todolistId)
+                            }
+
                             const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                                 const taskStatus = e.currentTarget.checked
                                 changeTaskStatus(t.id, taskStatus, todolistId)
@@ -107,10 +82,11 @@ export const Todolist = ({
                             const deleteTaskHandler = () => {
                                 deleteTask(t.id, todolistId)
                             }
+
                             return (
                                 <li key={t.id}>
                                     <input type="checkbox" checked={t.isDone} onChange={onChangeTaskStatusHandler}/>
-                                    <span className={t.isDone ? 'isDone' : ''}> {t.title} </span>
+                                    <EditableSpan value={t.title} onChange={onChangeTaskTitleHandler} isDone={t.isDone}/>
                                     <Button onClick={deleteTaskHandler} title='x'/>
                                 </li>)
                         })}
