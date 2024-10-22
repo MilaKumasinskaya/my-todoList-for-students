@@ -1,4 +1,6 @@
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
 type EditableSpanPropsType = {
     value: string
@@ -33,13 +35,18 @@ export const EditableSpan = ({value, onChange, isDone}: EditableSpanPropsType) =
     return (
         <>
             {editMode ? (
-                <input value={text}
-                       onChange={onChangeTextHandler}
-                       onBlur={editModeHandler}
-                       onKeyUp={addTextOnEnterHandler}
-                       autoFocus/>
+                <TextField
+                    variant={'standard'}
+                    value={text}
+                    size={"small"}
+                    onChange={onChangeTextHandler}
+                    onBlur={editModeHandler}
+                    onKeyUp={addTextOnEnterHandler}
+                    autoFocus/>
             ) : (
-                <span onDoubleClick={editModeHandler} className={isDone ? 'isDone' : ''}>{value}</span>
+                <Typography  onDoubleClick={editModeHandler} sx={isDone ? {opacity: '0.5',
+                    textDecoration: 'line-through',
+                    textDecorationColor: 'blue'} : {} }>{value}</Typography >
             )}
         </>
     );

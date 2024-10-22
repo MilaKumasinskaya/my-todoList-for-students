@@ -1,40 +1,59 @@
-import {Button} from "./Button";
 import {ChangeEvent, KeyboardEvent, useState} from "react";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import {AddBox} from "@mui/icons-material";
+import Box from "@mui/material/Box";
 
 type AddItemFormProps = {
     addItem: (value: string) => void
 };
+
 export const AddItemForm = ({addItem}: AddItemFormProps) => {
 
     const [itemTitle, setItemTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
 
-    const onChangeTaskTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    const onChangeItemTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setItemTitle(event.currentTarget.value)
         setError(null)
     }
 
-    const addTaskTitleHandler = () => {
+    const addItemTitleHandler = () => {
         if (itemTitle.trim() !== '') {
             addItem(itemTitle.trim())
             setItemTitle('')
         } else {
-            setError('enter a task title')
+            setError('title is required')
         }
     }
 
-    const addTaskOnEnterTitleHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    const addItemOnEnterTitleHandler = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            addTaskTitleHandler()
+            addItemTitleHandler()
         }
     }
 
     return (
-        <div>
-            <input className={error ? 'error' : ''} value={itemTitle} onChange={onChangeTaskTitle}
-                   onKeyDown={addTaskOnEnterTitleHandler}/>
-            {error && <div className={'error-message'}>{error}</div>}
-            <Button title={'+'} onClick={addTaskTitleHandler} disabled={!!error}/>
-        </div>
+        <Box sx={{
+            p: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            }}>
+            <TextField
+                sx={{width: '350px'}}
+                label="Enter a title"
+                variant={'outlined'}
+                value={itemTitle}
+                size={'small'}
+                error={!!error}
+                helperText={error}
+                onChange={onChangeItemTitle}
+                onKeyDown={addItemOnEnterTitleHandler}
+            />
+            <IconButton color="primary" onClick={addItemTitleHandler} disabled={!!error}>
+                <AddBox />
+            </IconButton>
+        </Box>
     );
 };
