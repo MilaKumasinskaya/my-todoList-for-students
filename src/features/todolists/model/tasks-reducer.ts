@@ -1,7 +1,14 @@
-import {TasksStateType} from "../app/App";
+
 import {v1} from "uuid";
 import {AddTodolistAT, RemoveTodolistAT} from "./todolists-reducer";
-
+export type TaskType = {
+    id: string,
+    title: string,
+    isDone: boolean
+}
+export type TasksStateType = {
+    [key: string]: TaskType[]
+}
 const initialState: TasksStateType = {}
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType) => {
     switch (action.type) {

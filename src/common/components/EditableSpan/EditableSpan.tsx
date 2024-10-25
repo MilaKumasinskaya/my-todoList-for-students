@@ -2,13 +2,13 @@ import {ChangeEvent, KeyboardEvent, useState} from "react";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
-type EditableSpanPropsType = {
+type Props = {
     value: string
     onChange: (value: string) => void
     isDone?: boolean
 };
 
-export const EditableSpan = ({value, onChange, isDone}: EditableSpanPropsType) => {
+export const EditableSpan = ({value, onChange, isDone}: Props) => {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(value)
