@@ -1,42 +1,47 @@
 import Checkbox from "@mui/material/Checkbox";
-import {EditableSpan} from "../../../../../../../common/components/EditableSpan/EditableSpan";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../../../../model/tasks-reducer";
+import {
+    removeTaskTC, updateTaskTC
+} from "../../../../../model/tasks-reducer";
 import {ChangeEvent} from "react";
-import {TodolistType} from "../../../../../model/todolists-reducer";
-import {useAppDispatch} from "../../../../../../../common/hooks/useAppDispatch";
+
+import {useAppDispatch} from "common/hooks";
+import {EditableSpan} from "common/components";
+import {DomainTodolist} from "../../../../../model/todolists-reducer";
+import {DomainTask} from "../../../../../api/tasksApi.types";
+import {TaskStatus} from "common/enums";
 
 type TaskPropsType = {
-    todolist: TodolistType
-    task: TaskType
+    todolist: DomainTodolist
+    task: DomainTask
 };
 export const Task = ({todolist, task}: TaskPropsType) => {
     const dispatch = useAppDispatch()
 
     const onChangeTaskTitleHandler = (title: string) => {
-        dispatch(changeTaskTitleAC({todolistId: todolist.id, title, taskId: task.id,}))
+        dispatch(updateTaskTC({id: task.todoListId, taskId: task.id, title}))
     }
     const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        const taskStatus = e.currentTarget.checked
-        dispatch(changeTaskStatusAC({todolistId: todolist.id, taskId: task.id, status: taskStatus}))
+        const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+        dispatch(updateTaskTC({id: task.todoListId, taskId: task.id, status}))
     }
     const deleteTaskHandler = () => {
-        dispatch(removeTaskAC({todolistId: todolist.id, taskId: task.id}))
+        dispatch(removeTaskTC({id: todolist.id, taskId: task.id}))
     }
 
     return (
         <ListItem sx={{
             p: 0,
             justifyContent: 'space-between',
-            opacity: task.isDone ? 0.5 : 1,
+            opacity: task.status === TaskStatus.Completed ? 0.5 : 1,
         }}
                   disableGutters
                   disablePadding>
-            <Checkbox checked={task.isDone} onChange={onChangeTaskStatusHandler}/>
-            <EditableSpan value={task.title} onChange={onChangeTaskTitleHandler} isDone={task.isDone}/>
-            <IconButton onClick={deleteTaskHandler}>
+            <Checkbox checked={task.status === TaskStatus.Completed} onChange={onChangeTaskStatusHandler} disabled={todolist.entityStatus === 'loading'}/>
+            <EditableSpan value={task.title} onChange={onChangeTaskTitleHandler} isDone={task.status === TaskStatus.Completed} disabled={todolist.entityStatus === 'loading'}/>
+            <IconButton onClick={deleteTaskHandler} disabled={todolist.entityStatus === 'loading'}>
                 <DeleteIcon/>
             </IconButton>
         </ListItem>

@@ -6,9 +6,10 @@ type Props = {
     value: string
     onChange: (value: string) => void
     isDone?: boolean
+    disabled?: boolean
 };
 
-export const EditableSpan = ({value, onChange, isDone}: Props) => {
+export const EditableSpan = ({value, onChange, isDone, disabled}: Props) => {
 
     const [editMode, setEditMode] = useState(false)
     const [text, setText] = useState(value)
@@ -34,7 +35,7 @@ export const EditableSpan = ({value, onChange, isDone}: Props) => {
 
     return (
         <>
-            {editMode ? (
+            {editMode && !disabled ? (
                 <TextField
                     variant={'standard'}
                     value={text}
@@ -42,11 +43,16 @@ export const EditableSpan = ({value, onChange, isDone}: Props) => {
                     onChange={onChangeTextHandler}
                     onBlur={editModeHandler}
                     onKeyUp={addTextOnEnterHandler}
-                    autoFocus/>
+                    autoFocus
+                />
             ) : (
-                <Typography  onDoubleClick={editModeHandler} sx={isDone ? {opacity: '0.5',
-                    textDecoration: 'line-through',
-                    textDecorationColor: 'blue'} : {} }>{value}</Typography >
+
+                <Typography  onDoubleClick={editModeHandler} color={disabled ? 'textDisabled' : ''}  sx={isDone ? {opacity: '0.5',
+                textDecoration: 'line-through',
+                textDecorationColor: 'blue'} : {} }>
+            {value}
+                </Typography >
+
             )}
         </>
     );

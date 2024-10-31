@@ -1,11 +1,12 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {changeTodolistFilterAC, TodolistType} from "../../../../model/todolists-reducer";
-import {useAppDispatch} from "../../../../../../common/hooks/useAppDispatch";
+import {changeTodolistFilterAC, DomainTodolist} from "../../../../model/todolists-reducer";
+import {useAppDispatch} from "common/hooks";
+
 
 
 type FilterTasksButtonsPropsType = {
-    todolist: TodolistType
+    todolist: DomainTodolist
 }
 export const FilterTasksButtons = ({todolist}: FilterTasksButtonsPropsType) => {
     const {filter, id} = todolist

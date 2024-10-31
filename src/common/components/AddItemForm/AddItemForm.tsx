@@ -6,9 +6,10 @@ import Box from "@mui/material/Box";
 
 type Props = {
     addItem: (value: string) => void
+    disabled?: boolean
 };
 
-export const AddItemForm = ({addItem}: Props) => {
+export const AddItemForm = ({addItem, disabled}: Props) => {
 
     const [itemTitle, setItemTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -48,10 +49,11 @@ export const AddItemForm = ({addItem}: Props) => {
                 size={'small'}
                 error={!!error}
                 helperText={error}
+                disabled={disabled}
                 onChange={onChangeItemTitle}
                 onKeyDown={addItemOnEnterTitleHandler}
             />
-            <IconButton color="primary" onClick={addItemTitleHandler} disabled={!!error}>
+            <IconButton color={"primary"} onClick={addItemTitleHandler} disabled={disabled}>
                 <AddBox />
             </IconButton>
         </Box>

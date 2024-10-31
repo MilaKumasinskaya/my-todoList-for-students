@@ -1,19 +1,25 @@
 import {ThemeProvider} from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import {Main} from "./Main";
-import {Header} from "../common/components/Header/Header";
-import {getTheme} from "../common/theme/theme";
-import {useAppSelector} from "../common/hooks/useAppSelector";
-import {selectThemeMode} from "./appSelectors";
+import {ErrorSnackbar, Header} from "common/components";
+import {getTheme} from "common/theme";
+import {useAppSelector} from "common/hooks";
+import {selectAppStatus, selectThemeMode} from "./appSelectors";
+import LinearProgress from "@mui/material/LinearProgress";
+import React from "react";
+
+
 
 export const App = () => {
     const themeMode = useAppSelector(selectThemeMode)
+
 
     return (
         <ThemeProvider theme={getTheme(themeMode)}>
             <CssBaseline/>
             <Header/>
             <Main/>
+            <ErrorSnackbar/>
         </ThemeProvider>
     );
 };
