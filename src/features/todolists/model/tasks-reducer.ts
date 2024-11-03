@@ -1,9 +1,9 @@
-import {AddTodolistAT, RemoveTodolistAT} from "./todolists-reducer";
+import {AddTodolistAT, ClearTodolistsAT, RemoveTodolistAT} from "./todolists-reducer";
 import {tasksApi} from "../api/tasksApi";
 import {AppDispatch, RootState} from "../../../app/store";
 import {DomainTask, UpdateTaskDomainModel} from "../api/tasksApi.types";
 import {ResultCode, TaskStatus} from "common/enums";
-import {setAppStatusAC, setErrorAC} from "../../../app/app-reducer";
+import {setAppStatusAC} from "../../../app/app-reducer";
 import {handleNetworkError, handleServerError} from "common/utils";
 
 export type TasksStateType = {
@@ -43,6 +43,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             delete copyState[action.payload.id];
             return copyState;
         }
+        case "CLEAR-TODOLISTS": {
+            return {}
+        }
         default:
             return state
     }
@@ -70,7 +73,7 @@ export const fetchTasksTC = (id: string) => (dispatch: AppDispatch) => {
             dispatch(setAppStatusAC('succeeded'))
             dispatch(setTasksAC({id, tasks: res.data.items}))
         })
-        .catch((err)=> {
+        .catch((err) => {
             handleNetworkError(dispatch, err)
         })
 }
@@ -78,14 +81,14 @@ export const removeTaskTC = (payload: { id: string, taskId: string }) => (dispat
     dispatch(setAppStatusAC('loading'))
     tasksApi.deleteTask(payload)
         .then((res) => {
-            if(res.data.resultCode === ResultCode.Success){
+            if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatusAC('succeeded'))
                 dispatch(removeTaskAC(payload))
             } else {
                 handleServerError(dispatch, res.data)
             }
         })
-        .catch((err)=> {
+        .catch((err) => {
             handleNetworkError(dispatch, err)
         })
 }
@@ -93,14 +96,14 @@ export const addTaskTC = (payload: { id: string, title: string }) => (dispatch: 
     dispatch(setAppStatusAC('loading'))
     tasksApi.createTask(payload)
         .then((res) => {
-            if(res.data.resultCode === ResultCode.Success){
+            if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatusAC('succeeded'))
                 dispatch(addTaskAC({task: res.data.data.item}))
             } else {
                 handleServerError(dispatch, res.data)
             }
         })
-        .catch((err)=> {
+        .catch((err) => {
             handleNetworkError(dispatch, err)
         })
 }
@@ -122,14 +125,14 @@ export const updateTaskTC = (payload: { id: string, taskId: string, status?: Tas
         dispatch(setAppStatusAC('loading'))
         tasksApi.updateTask({id: task.todoListId, taskId: task.id, model})
             .then((res) => {
-                if(res.data.resultCode === ResultCode.Success){
+                if (res.data.resultCode === ResultCode.Success) {
                     dispatch(setAppStatusAC('succeeded'))
                     dispatch(updateTaskAC({task: res.data.data.item}))
                 } else {
                     handleServerError(dispatch, res.data)
                 }
             })
-            .catch((err)=>{
+            .catch((err) => {
                 handleNetworkError(dispatch, err)
             })
     }
@@ -142,6 +145,7 @@ type ActionsType = RemoveTaskAT
     | RemoveTodolistAT
     | SetTasksAT
     | UpdateTaskAT
+    | ClearTodolistsAT
 type RemoveTaskAT = ReturnType<typeof removeTaskAC>
 type AddTaskAT = ReturnType<typeof addTaskAC>
 type UpdateTaskAT = ReturnType<typeof updateTaskAC>

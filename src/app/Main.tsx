@@ -4,16 +4,21 @@ import Container from "@mui/material/Container";
 import React from "react";
 import { addTodolistTC} from "../features/todolists/model/todolists-reducer";
 import { Todolists } from "../features/todolists/ui/Todolists/Todolists";
-import {useAppDispatch} from "common/hooks";
+import {useAppDispatch, useAppSelector} from "common/hooks";
+import {selectIsLoggedIn} from "../features/auth/model/authSelectors";
+import {Navigate} from "react-router-dom";
+import {Path} from "common/router";
 
 export const Main = () => {
-
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
     const dispatch = useAppDispatch()
 
     const addTodolist = (title: string) => {
         dispatch(addTodolistTC(title))
     }
-
+    if(!isLoggedIn){
+        return <Navigate to={Path.Login}/>
+    }
     return (
 
             <Container fixed >

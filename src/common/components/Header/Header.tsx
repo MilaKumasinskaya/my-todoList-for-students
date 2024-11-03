@@ -17,7 +17,7 @@ export const Header = () => {
                 <IconButton color="inherit">
                     <MenuIcon/>
                 </IconButton>
-                <MenuButton/>
+                <MenuButton />
             </Toolbar>
             {status === 'loading' && <LinearProgress />}
 

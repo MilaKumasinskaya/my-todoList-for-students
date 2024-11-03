@@ -1,24 +1,37 @@
 import {ThemeProvider} from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import {Main} from "./Main";
 import {ErrorSnackbar, Header} from "common/components";
 import {getTheme} from "common/theme";
-import {useAppSelector} from "common/hooks";
-import {selectAppStatus, selectThemeMode} from "./appSelectors";
-import LinearProgress from "@mui/material/LinearProgress";
-import React from "react";
-
-
+import {useAppDispatch, useAppSelector} from "common/hooks";
+import {selectThemeMode} from "./appSelectors";
+import React, {useEffect} from "react";
+import {Outlet} from "react-router-dom";
+import {initializeAppTC} from "../features/auth/model/auth-reducer";
+import {selectIsInitialized} from "../features/auth/model/authSelectors";
+import {CircularProgress} from "@mui/material";
+import Box from "@mui/material/Box";
 
 export const App = () => {
     const themeMode = useAppSelector(selectThemeMode)
+    const isInitialized = useAppSelector(selectIsInitialized)
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [])
 
 
     return (
         <ThemeProvider theme={getTheme(themeMode)}>
             <CssBaseline/>
-            <Header/>
-            <Main/>
+            {isInitialized ?
+                <>
+                    <Header/>
+                    <Outlet/>
+                </> :
+                <Box sx={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+                    <CircularProgress size={150} thickness={3}/>
+                </Box>
+            }
             <ErrorSnackbar/>
         </ThemeProvider>
     );
