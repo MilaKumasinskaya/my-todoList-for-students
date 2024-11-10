@@ -1,8 +1,7 @@
 import {
-    changeTodolistTitleAC,
     DomainTodolist,
     removeTodolistTC, updateTodolistTitleTC
-} from "../../../../model/todolists-reducer";
+} from "../../../../model/todolistsSlice";
 import Box from "@mui/material/Box";
 
 import IconButton from "@mui/material/IconButton";

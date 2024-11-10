@@ -1,11 +1,10 @@
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
-import {DomainTodolist} from "../../../../model/todolists-reducer";
+import {DomainTodolist} from "../../../../model/todolistsSlice";
 import {Task} from "./Task/Task";
-import {selectTasks} from "../../../../model/tasksSelectors";
 import {useAppDispatch, useAppSelector} from "common/hooks";
 import {useEffect} from "react";
-import {fetchTasksTC} from "../../../../model/tasks-reducer";
+import {fetchTasksTC, selectTasks} from "../../../../model/tasksSlice";
 import {TaskStatus} from "common/enums";
 
 type TasksPropsType = {

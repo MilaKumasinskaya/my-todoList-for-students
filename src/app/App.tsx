@@ -3,13 +3,12 @@ import CssBaseline from '@mui/material/CssBaseline'
 import {ErrorSnackbar, Header} from "common/components";
 import {getTheme} from "common/theme";
 import {useAppDispatch, useAppSelector} from "common/hooks";
-import {selectThemeMode} from "./appSelectors";
 import React, {useEffect} from "react";
 import {Outlet} from "react-router-dom";
-import {initializeAppTC} from "../features/auth/model/auth-reducer";
-import {selectIsInitialized} from "../features/auth/model/authSelectors";
+import {initializeAppTC, selectIsInitialized} from "../features/auth/model/authSlice";
 import {CircularProgress} from "@mui/material";
 import Box from "@mui/material/Box";
+import {selectThemeMode} from './appSlice';
 
 export const App = () => {
     const themeMode = useAppSelector(selectThemeMode)

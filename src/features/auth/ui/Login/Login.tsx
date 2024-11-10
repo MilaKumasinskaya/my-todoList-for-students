@@ -8,13 +8,12 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import {useAppDispatch, useAppSelector} from 'common/hooks'
 import {getTheme} from 'common/theme'
-import {selectThemeMode} from '../../../../app/appSelectors'
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import Typography from "@mui/material/Typography";
-import {loginTC} from "../../model/auth-reducer";
-import {selectIsLoggedIn} from "../../model/authSelectors";
+import {loginTC, selectIsLoggedIn} from "../../model/authSlice";
 import { Navigate } from 'react-router-dom'
 import {Path} from "common/router";
+import {selectThemeMode} from "../../../../app/appSlice";
 
 
 export  type Inputs = {

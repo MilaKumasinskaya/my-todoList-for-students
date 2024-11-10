@@ -2,14 +2,10 @@ import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
 import React from "react";
-import {changeThemeAC} from "../../../app/app-reducer";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {useAppSelector} from "../../hooks/useAppSelector";
-import {selectThemeMode} from "../../../app/appSelectors";
-import {selectIsLoggedIn} from "../../../features/auth/model/authSelectors";
-import {logoutTC} from "../../../features/auth/model/auth-reducer";
-import {Path} from "common/router";
-import { Navigate } from "react-router-dom";
+import {useAppDispatch} from "common/hooks";
+import {useAppSelector} from "common/hooks";
+import {logoutTC, selectIsLoggedIn} from "../../../features/auth/model/authSlice";
+import {changeTheme, selectThemeMode} from "../../../app/appSlice";
 
 export const MenuButton = () => {
     const themeMode = useAppSelector(selectThemeMode)
@@ -17,7 +13,8 @@ export const MenuButton = () => {
     const dispatch = useAppDispatch()
 
     const changeModeHandler = () => {
-        dispatch(changeThemeAC(themeMode === 'light' ? 'dark' : 'light'))
+        dispatch(changeTheme({themeMode: themeMode === 'light' ? 'dark' : 'light'
+    }))
     }
     const logoutHandler = () => {
         dispatch(logoutTC())

@@ -2,9 +2,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist/Todolist";
 import React, {useEffect} from "react";
-import {selectTodolists} from "../../model/todolistsSelector";
 import {useAppDispatch, useAppSelector} from "common/hooks";
-import {fetchTodolistsTC} from "../../model/todolists-reducer";
+import {fetchTodolistsTC, selectTodolists} from "../../model/todolistsSlice";
 
 
 export const Todolists = () => {

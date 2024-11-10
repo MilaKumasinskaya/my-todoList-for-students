@@ -1,7 +1,7 @@
-import {setAppStatusAC, setErrorAC} from "../../app/app-reducer";
 import {AppDispatch} from "../../app/store";
+import {setAppStatus, setError} from "../../app/appSlice";
 
 export  const handleNetworkError = (dispatch: AppDispatch, err: {message: string}) => {
-    dispatch(setAppStatusAC('failed'))
-    dispatch(setErrorAC(err.message))
+    dispatch(setAppStatus({status: 'failed'}))
+    dispatch(setError({error: err.message}))
 }

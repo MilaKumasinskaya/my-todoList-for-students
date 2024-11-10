@@ -6,7 +6,7 @@ import React from "react";
 import {MenuButton} from "common/components";
 import LinearProgress from "@mui/material/LinearProgress";
 import {useAppSelector} from "common/hooks";
-import {selectAppStatus} from "../../../app/appSelectors";
+import {selectAppStatus} from "../../../app/appSlice";
 
 export const Header = () => {
     const status = useAppSelector(selectAppStatus)

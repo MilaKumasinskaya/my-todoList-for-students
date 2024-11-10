@@ -4,12 +4,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
 import {
     removeTaskTC, updateTaskTC
-} from "../../../../../model/tasks-reducer";
+} from "../../../../../model/tasksSlice";
 import {ChangeEvent} from "react";
 
 import {useAppDispatch} from "common/hooks";
 import {EditableSpan} from "common/components";
-import {DomainTodolist} from "../../../../../model/todolists-reducer";
+import {DomainTodolist} from "../../../../../model/todolistsSlice";
 import {DomainTask} from "../../../../../api/tasksApi.types";
 import {TaskStatus} from "common/enums";
 

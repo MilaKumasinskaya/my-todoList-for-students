@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {changeTodolistFilterAC, DomainTodolist} from "../../../../model/todolists-reducer";
+import {changeTodolistFilter, DomainTodolist} from "../../../../model/todolistsSlice";
 import {useAppDispatch} from "common/hooks";
 
 
@@ -13,15 +13,15 @@ export const FilterTasksButtons = ({todolist}: FilterTasksButtonsPropsType) => {
     const dispatch = useAppDispatch()
 
     const allFilerTasksHandler = () => {
-        dispatch(changeTodolistFilterAC({id, filter: 'all'}))
+        dispatch(changeTodolistFilter({id, filter: 'all'}))
     }
 
     const activeFilerTasksHandler = () => {
-        dispatch(changeTodolistFilterAC({id, filter: 'active'}))
+        dispatch(changeTodolistFilter({id, filter: 'active'}))
     }
 
     const completedFilerTasksHandler = () => {
-        dispatch(changeTodolistFilterAC({id, filter: 'completed'}))
+        dispatch(changeTodolistFilter({id, filter: 'completed'}))
     }
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

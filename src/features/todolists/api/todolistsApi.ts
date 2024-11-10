@@ -1,7 +1,7 @@
 import {instance} from "common/instance";
 import {Todolist} from "./todolistsApi.types";
 import {BaseResponse} from "common/types";
-import {DomainTodolist} from "../model/todolists-reducer";
+import {DomainTodolist} from "../model/todolistsSlice";
 
 export const todolistsApi = {
     getTodolists(){
