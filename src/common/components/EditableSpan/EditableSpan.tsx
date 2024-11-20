@@ -46,13 +46,11 @@ export const EditableSpan = ({value, onChange, isDone, disabled}: Props) => {
                     autoFocus
                 />
             ) : (
-
                 <Typography  onDoubleClick={editModeHandler} color={disabled ? 'textDisabled' : ''}  sx={isDone ? {opacity: '0.5',
                 textDecoration: 'line-through',
                 textDecorationColor: 'blue'} : {} }>
             {value}
                 </Typography >
-
             )}
         </>
     );

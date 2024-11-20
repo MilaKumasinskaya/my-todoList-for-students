@@ -2,29 +2,22 @@ import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import {DomainTodolist} from "../../../../model/todolistsSlice";
 import {Task} from "./Task/Task";
-import {useAppDispatch, useAppSelector} from "common/hooks";
-import {useEffect} from "react";
-import {fetchTasksTC, selectTasks} from "../../../../model/tasksSlice";
 import {TaskStatus} from "common/enums";
+import {useGetTasksQuery} from "../../../../api/tasksApi";
 
 type TasksPropsType = {
     todolist: DomainTodolist
 }
 
 export const Tasks = ({todolist}: TasksPropsType) => {
-    const tasks = useAppSelector(selectTasks)
-    const dispatch = useAppDispatch()
+    const {data} = useGetTasksQuery(todolist.id)
 
-    useEffect(()=>{
-        dispatch(fetchTasksTC(todolist.id))
-    }, [])
-
-    let tasksForTodolist = tasks[todolist.id]
+    let tasksForTodolist = data?.items
     if (todolist.filter === "active") {
-        tasksForTodolist = tasks[todolist.id].filter(t => t.status === TaskStatus.New)
+        tasksForTodolist = tasksForTodolist?.filter(t => t.status === TaskStatus.New)
     }
     if (todolist.filter === "completed") {
-        tasksForTodolist = tasks[todolist.id].filter(t => t.status === TaskStatus.Completed)
+        tasksForTodolist = tasksForTodolist?.filter(t => t.status === TaskStatus.Completed)
     }
 
     return (

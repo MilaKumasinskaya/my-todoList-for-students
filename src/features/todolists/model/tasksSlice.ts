@@ -1,4 +1,4 @@
-import {tasksApi} from "../api/tasksApi";
+import {_tasksApi} from "../api/tasksApi";
 import {AppDispatch, RootState} from "../../../app/store";
 import {DomainTask, UpdateTaskDomainModel} from "../api/tasksApi.types";
 import {ResultCode, TaskStatus} from "common/enums";
@@ -65,7 +65,7 @@ export const {selectTasks} = tasksSlice.selectors
 
 export const fetchTasksTC = (id: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    tasksApi.getTasks(id)
+    _tasksApi.getTasks(id)
         .then(res => {
 
             dispatch(setAppStatus({status: 'succeeded'}))
@@ -77,7 +77,7 @@ export const fetchTasksTC = (id: string) => (dispatch: AppDispatch) => {
 }
 export const removeTaskTC = (payload: { id: string, taskId: string }) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    tasksApi.deleteTask(payload)
+    _tasksApi.deleteTask(payload)
         .then((res) => {
             if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatus({status: 'succeeded'}))
@@ -92,7 +92,7 @@ export const removeTaskTC = (payload: { id: string, taskId: string }) => (dispat
 }
 export const addTaskTC = (payload: { id: string, title: string }) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    tasksApi.createTask(payload)
+    _tasksApi.createTask(payload)
         .then((res) => {
             if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatus({status: 'succeeded'}))
@@ -121,7 +121,7 @@ export const updateTaskTC = (payload: { id: string, taskId: string, status?: Tas
             startDate: task.startDate,
         }
         dispatch(setAppStatus({status: 'loading'}))
-        tasksApi.updateTask({id: task.todoListId, taskId: task.id, model})
+        _tasksApi.updateTask({id: task.todoListId, taskId: task.id, model})
             .then((res) => {
                 if (res.data.resultCode === ResultCode.Success) {
                     dispatch(setAppStatus({status: 'succeeded'}))

@@ -20,7 +20,6 @@ export const Header = () => {
                 <MenuButton />
             </Toolbar>
             {status === 'loading' && <LinearProgress />}
-
         </AppBar>
     )
 }

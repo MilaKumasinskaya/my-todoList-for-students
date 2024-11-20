@@ -3,21 +3,28 @@ import CssBaseline from '@mui/material/CssBaseline'
 import {ErrorSnackbar, Header} from "common/components";
 import {getTheme} from "common/theme";
 import {useAppDispatch, useAppSelector} from "common/hooks";
-import React, {useEffect} from "react";
 import {Outlet} from "react-router-dom";
-import {initializeAppTC, selectIsInitialized} from "../features/auth/model/authSlice";
 import {CircularProgress} from "@mui/material";
 import Box from "@mui/material/Box";
-import {selectThemeMode} from './appSlice';
+import {selectThemeMode, setIsLoggedIn} from './appSlice';
+import {useMeQuery} from "../features/auth/api/authApi";
+import {useEffect, useState} from "react";
+import {ResultCode} from "common/enums";
 
 export const App = () => {
     const themeMode = useAppSelector(selectThemeMode)
-    const isInitialized = useAppSelector(selectIsInitialized)
+    const [isInitialized, setIsInitialized] = useState(false)
+    const {data, isLoading} = useMeQuery()
     const dispatch = useAppDispatch()
-    useEffect(() => {
-        dispatch(initializeAppTC())
-    }, [])
 
+    useEffect(()=>{
+        if(!isLoading){
+            setIsInitialized(true)
+            if(data?.resultCode === ResultCode.Success){
+                dispatch(setIsLoggedIn({isLoggedIn: true}))
+            }
+        }
+    }, [isLoading, data])
 
     return (
         <ThemeProvider theme={getTheme(themeMode)}>

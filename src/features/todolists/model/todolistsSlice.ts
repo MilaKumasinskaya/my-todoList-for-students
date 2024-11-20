@@ -1,6 +1,6 @@
 import {Todolist} from "../api/todolistsApi.types";
 import {AppDispatch} from "../../../app/store";
-import {todolistsApi} from "../api/todolistsApi";
+import {_todolistsApi} from "../api/todolistsApi";
 import {RequestStatus, setAppStatus} from "../../../app/appSlice";
 import {ResultCode} from "common/enums";
 import {handleNetworkError, handleServerError} from "common/utils";
@@ -73,7 +73,7 @@ export const {selectTodolists} = todolistsSlice.selectors
 
 export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    todolistsApi.getTodolists()
+    _todolistsApi.getTodolists()
         .then(res => {
             dispatch(setAppStatus({status: 'succeeded'}))
             dispatch(setTodolists({todolists: res.data}))
@@ -84,7 +84,7 @@ export const fetchTodolistsTC = () => (dispatch: AppDispatch) => {
 }
 export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    todolistsApi.createTodolist(title)
+    _todolistsApi.createTodolist(title)
         .then((res) => {
             if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatus({status: 'succeeded'}))
@@ -100,7 +100,7 @@ export const addTodolistTC = (title: string) => (dispatch: AppDispatch) => {
 export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
     dispatch(changeTodolistEntityStatus({id, entityStatus: 'loading'}))
-    todolistsApi.deleteTodolist(id)
+    _todolistsApi.deleteTodolist(id)
         .then((res) => {
             if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatus({status: 'succeeded'}))
@@ -116,7 +116,7 @@ export const removeTodolistTC = (id: string) => (dispatch: AppDispatch) => {
 }
 export const updateTodolistTitleTC = (payload: { id: string, title: string }) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus({status: 'loading'}))
-    todolistsApi.updateTodolist(payload)
+    _todolistsApi.updateTodolist(payload)
         .then((res) => {
             if (res.data.resultCode === ResultCode.Success) {
                 dispatch(setAppStatus({status: 'succeeded'}))

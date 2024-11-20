@@ -2,21 +2,18 @@ import {DomainTodolist} from "../../../model/todolistsSlice";
 import {FilterTasksButtons} from "./FilterTasksButtons/FilterTasksButtons";
 import {Tasks} from "./Tasks/Tasks";
 import {TodolistTitle} from "./TodolistTitle/TodolistTitle";
-import { addTaskTC} from "../../../model/tasksSlice";
 import {AddItemForm} from "common/components";
-import {useAppDispatch} from "common/hooks";
-
-
+import {useAddTaskMutation} from "../../../api/tasksApi";
 
 type TodolistPropsType = {
     todolist: DomainTodolist
 };
 
 export const Todolist = ({todolist}: TodolistPropsType) => {
-        const dispatch = useAppDispatch()
+    const [addTask] = useAddTaskMutation()
 
         const addTaskHandler = (title: string) => {
-            dispatch(addTaskTC({id: todolist.id, title}))
+          addTask({id: todolist.id, title})
         }
 
         return (

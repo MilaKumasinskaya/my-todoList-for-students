@@ -1,14 +1,11 @@
 import {
-    DomainTodolist,
-    removeTodolistTC, updateTodolistTitleTC
+    DomainTodolist
 } from "../../../../model/todolistsSlice";
 import Box from "@mui/material/Box";
-
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useAppDispatch} from "common/hooks";
 import {EditableSpan} from "common/components";
-
+import {useRemoveTodolistMutation, useUpdateTodolistMutation} from "../../../../api/todolistsApi";
 
 type TodolistTitlePropsType = {
     todolist: DomainTodolist
@@ -16,15 +13,15 @@ type TodolistTitlePropsType = {
 
 export const TodolistTitle = ({todolist}: TodolistTitlePropsType) => {
     const {id, title, entityStatus} = todolist
-    const dispatch = useAppDispatch()
+    const [updateTodolistTitle] = useUpdateTodolistMutation()
+    const [removeTodolist] = useRemoveTodolistMutation()
 
     const onChangeTodoTitleHandler = (title: string) => {
-        dispatch(updateTodolistTitleTC({id, title}))
+        updateTodolistTitle({id, title})
     }
 
     const removeTodolistHandler = () => {
-        dispatch(removeTodolistTC(id))
-
+        removeTodolist(id)
     }
 
     return (

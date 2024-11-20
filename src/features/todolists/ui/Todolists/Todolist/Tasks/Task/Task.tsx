@@ -2,33 +2,47 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
-import {
-    removeTaskTC, updateTaskTC
-} from "../../../../../model/tasksSlice";
 import {ChangeEvent} from "react";
-
-import {useAppDispatch} from "common/hooks";
 import {EditableSpan} from "common/components";
 import {DomainTodolist} from "../../../../../model/todolistsSlice";
-import {DomainTask} from "../../../../../api/tasksApi.types";
+import {DomainTask, UpdateTaskDomainModel} from "../../../../../api/tasksApi.types";
 import {TaskStatus} from "common/enums";
+import {useRemoveTaskMutation, useUpdateTaskMutation} from "../../../../../api/tasksApi";
 
 type TaskPropsType = {
     todolist: DomainTodolist
     task: DomainTask
 };
+
 export const Task = ({todolist, task}: TaskPropsType) => {
-    const dispatch = useAppDispatch()
+    const [removeTask] = useRemoveTaskMutation()
+    const [updateTask] = useUpdateTaskMutation()
 
     const onChangeTaskTitleHandler = (title: string) => {
-        dispatch(updateTaskTC({id: task.todoListId, taskId: task.id, title}))
+        const model: UpdateTaskDomainModel = {
+            status: task.status,
+            title,
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+        }
+        updateTask({id: task.todoListId, taskId: task.id, model})
     }
     const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
-        dispatch(updateTaskTC({id: task.todoListId, taskId: task.id, status}))
+        const model: UpdateTaskDomainModel = {
+            status,
+            title: task.title,
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+        }
+        updateTask({id: task.todoListId, taskId: task.id, model})
     }
     const deleteTaskHandler = () => {
-        dispatch(removeTaskTC({id: todolist.id, taskId: task.id}))
+        removeTask({id: todolist.id, taskId: task.id})
     }
 
     return (

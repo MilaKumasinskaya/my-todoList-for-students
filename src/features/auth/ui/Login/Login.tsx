@@ -10,10 +10,11 @@ import {useAppDispatch, useAppSelector} from 'common/hooks'
 import {getTheme} from 'common/theme'
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import Typography from "@mui/material/Typography";
-import {loginTC, selectIsLoggedIn} from "../../model/authSlice";
-import { Navigate } from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 import {Path} from "common/router";
-import {selectThemeMode} from "../../../../app/appSlice";
+import {loginTC, selectIsLoggedIn, selectThemeMode, setIsLoggedIn} from "../../../../app/appSlice";
+import {useLoginMutation} from "../../api/authApi";
+import {ResultCode} from "common/enums";
 
 
 export  type Inputs = {
@@ -25,8 +26,9 @@ export  type Inputs = {
 export const Login = () => {
     const themeMode = useAppSelector(selectThemeMode)
     const theme = getTheme(themeMode)
-    const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(selectIsLoggedIn)
+    const [login] = useLoginMutation()
+    const dispatch = useAppDispatch()
 
     const {
         register,
@@ -37,12 +39,18 @@ export const Login = () => {
     } = useForm<Inputs>({defaultValues: {email: '', password: '', rememberMe: false}})
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-      dispatch(loginTC(data))
-        reset()
+        login(data).then((res) => {
+            if (res.data?.resultCode === ResultCode.Success) {
+                dispatch(setIsLoggedIn({isLoggedIn: true}))
+                localStorage.setItem('sn-token', res.data.data.token)
+                reset()
+            }
+
+        })
     }
 
-    if(isLoggedIn){
-        return <Navigate to={Path.Main} />
+    if (isLoggedIn) {
+        return <Navigate to={Path.Main}/>
     }
 
     return (
@@ -97,7 +105,8 @@ export const Login = () => {
                                     />
                                 }
                             />
-                            <Button type={'submit'} variant={'contained'} color={'primary'} disabled={!touchedFields.password && !touchedFields.email}>
+                            <Button type={'submit'} variant={'contained'} color={'primary'}
+                                    disabled={!touchedFields.password && !touchedFields.email}>
                                 Login
                             </Button>
                         </FormGroup>
