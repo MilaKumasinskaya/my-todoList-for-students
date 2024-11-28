@@ -4,10 +4,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ListItem from "@mui/material/ListItem";
 import {ChangeEvent} from "react";
 import {EditableSpan} from "common/components";
-import {DomainTodolist} from "../../../../../model/todolistsSlice";
 import {DomainTask, UpdateTaskDomainModel} from "../../../../../api/tasksApi.types";
 import {TaskStatus} from "common/enums";
 import {useRemoveTaskMutation, useUpdateTaskMutation} from "../../../../../api/tasksApi";
+import {DomainTodolist} from "../../../../../api/todolistsApi";
 
 type TaskPropsType = {
     todolist: DomainTodolist

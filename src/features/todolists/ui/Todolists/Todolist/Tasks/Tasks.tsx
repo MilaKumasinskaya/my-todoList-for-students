@@ -1,34 +1,35 @@
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
-import {DomainTodolist} from "../../../../model/todolistsSlice";
 import {Task} from "./Task/Task";
-import {TaskStatus} from "common/enums";
-import {useGetTasksQuery} from "../../../../api/tasksApi";
+import {TasksSkeleton} from "../../../skeletons/TasksSkeleton/TasksSkeleton";
+import {TasksPagination} from "../TasksPagination/TasksPagination";
+import {DomainTodolist} from "../../../../api/todolistsApi";
+import {useTasks} from "../../../../lib/hooks/useTasks";
 
 type TasksPropsType = {
     todolist: DomainTodolist
 }
 
 export const Tasks = ({todolist}: TasksPropsType) => {
-    const {data} = useGetTasksQuery(todolist.id)
+    const { tasks, isLoading, totalCount, page, setPage } = useTasks(todolist)
 
-    let tasksForTodolist = data?.items
-    if (todolist.filter === "active") {
-        tasksForTodolist = tasksForTodolist?.filter(t => t.status === TaskStatus.New)
-    }
-    if (todolist.filter === "completed") {
-        tasksForTodolist = tasksForTodolist?.filter(t => t.status === TaskStatus.Completed)
+    if (isLoading) {
+        return <TasksSkeleton />
     }
 
     return (
         <>
-            {tasksForTodolist && tasksForTodolist.length === 0 ?
+            {tasks?.length === 0 ?
                 <Typography>tasks' list is empty</Typography> :
-                <List>
-                    {tasksForTodolist && tasksForTodolist.map((t) => {
-                        return <Task key={t.id} todolist={todolist} task={t}/>
-                    })}
-                </List>}
+                <>
+                    <List>
+                        {tasks?.map((t) => {
+                            return <Task key={t.id} todolist={todolist} task={t}/>
+                        })}
+                    </List>
+                    <TasksPagination totalCount={totalCount || 0} page={page} setPage={setPage} />
+                </>
+            }
         </>
     );
 };

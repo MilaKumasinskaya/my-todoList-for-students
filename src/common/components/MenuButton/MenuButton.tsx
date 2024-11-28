@@ -12,8 +12,7 @@ import {
 } from "../../../app/appSlice";
 import {useLogoutMutation} from "../../../features/auth/api/authApi";
 import {ResultCode} from "common/enums";
-import {clearTodolists} from "../../../features/todolists/model/todolistsSlice";
-import {clearTasks} from "../../../features/todolists/model/tasksSlice";
+import {baseApi} from "../../../app/baseApi";
 
 export const MenuButton = () => {
     const themeMode = useAppSelector(selectThemeMode)
@@ -29,11 +28,12 @@ export const MenuButton = () => {
       logout().then((res)=>{
           if(res.data?.resultCode === ResultCode.Success) {
               dispatch(setIsLoggedIn({isLoggedIn: false}))
-              dispatch(clearTodolists())
-              dispatch(clearTasks())
               localStorage.removeItem('sn-token')
           }
       })
+          .then(()=>{
+              dispatch(baseApi.util.invalidateTags(['Task', 'Todolist']))
+          })
     }
 
     return (
